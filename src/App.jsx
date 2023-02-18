@@ -1,14 +1,22 @@
 import {useEffect, useState} from "react";
 import "./index.css"
 
+import RedCandy from './images/red-candy.png';
+import OrangeCandy from './images/orange-candy.png';
+import YellowCandy from './images/yellow-candy.png';
+import GreenCandy from './images/green-candy.png';
+import BlueCandy from './images/blue-candy.png';
+import PurpleCandy from './images/purple-candy.png';
+import Blank from './images/blank.png';
+
 const width = 8;
 const candyColors = [
-    'red',
-    'orange',
-    'yellow',
-    'green',
-    'blue',
-    'purple',
+    RedCandy,
+    OrangeCandy,
+    YellowCandy,
+    GreenCandy,
+    BlueCandy,
+    PurpleCandy,
 ]
 
 const App = () => {
@@ -24,7 +32,7 @@ const App = () => {
 
     const deleteCell = (index) => {
         const newArrangement = currentColorArrangement;
-        newArrangement[index] = '';
+        newArrangement[index] = Blank;
         setCurrentColorArrangement(newArrangement)
     }
 
@@ -64,10 +72,10 @@ const App = () => {
     const makeCellsFall = () => {
         const newArrangement = currentColorArrangement;
         for (let i = width; i < width*width; i++) {
-            if (newArrangement[i] === '') {
+            if (newArrangement[i] === Blank) {
                 // console.log('my cell is empty', i)
                 newArrangement[i] = newArrangement[i-width];
-                newArrangement[i-width] = '';
+                newArrangement[i-width] = Blank;
                 setCurrentColorArrangement(newArrangement)
             }
         }
@@ -77,7 +85,7 @@ const App = () => {
         const newArrangement = currentColorArrangement;
 
         for (let i = 0; i < width; i++) {
-            if (newArrangement[i] === '') {
+            if (newArrangement[i] === Blank) {
                 newArrangement[i] = createRandomColor();
                 setCurrentColorArrangement(newArrangement)
             }
@@ -126,8 +134,6 @@ const App = () => {
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 columnOfThree.forEach(cell => deleteCell(cell));
-
-                setMessage('Column of three!');
             }
         }
     }
@@ -139,7 +145,6 @@ const App = () => {
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 columnOfThree.forEach(cell => deleteCell(cell));
-                setMessage('Column of four!');
             }
         }
     }
@@ -151,7 +156,6 @@ const App = () => {
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 columnOfThree.forEach(cell => deleteCell(cell))
-                setMessage('Column of five!')
             }
         }
     }
@@ -256,8 +260,8 @@ const App = () => {
         { currentColorArrangement &&
             currentColorArrangement.map((color, index) => (
                 <img className="cell"
+                    src={color}
                     key={index}
-                    style={{backgroundColor: color}}
                     alt={color}
                      data-id={index}
                      draggable={true}
