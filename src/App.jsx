@@ -26,6 +26,7 @@ const App = () => {
     const [draggedCell, setDraggedCell] = useState(null);
     const [replacedCell, setReplacedCell] = useState(null);
     const [score, setScore] = useState(0);
+    const [record, setRecord] = useState(0)
 
 
     const createRandomColor = () => {
@@ -136,7 +137,10 @@ const App = () => {
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 columnOfThree.forEach(cell => deleteCell(cell));
-                setScore((prev) => prev+3)
+                if (decidedColor !== Blank) {
+                    setScore((prev) => prev+3)
+                }
+
             }
         }
 
@@ -149,7 +153,9 @@ const App = () => {
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 columnOfThree.forEach(cell => deleteCell(cell));
+                if (decidedColor !== Blank) {
                 setScore((prev) => prev+4)
+                }
             }
         }
     }
@@ -161,7 +167,10 @@ const App = () => {
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 columnOfThree.forEach(cell => deleteCell(cell))
-                setScore((prev) => prev+5)
+                if (decidedColor !== Blank) {
+                    setScore((prev) => prev+5)
+                }
+
             }
         }
     }
@@ -176,7 +185,9 @@ const App = () => {
             }
             if (rowOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 rowOfThree.forEach(cell => deleteCell(cell))
-                setScore((prev) => prev+3)
+                if (decidedColor !== Blank) {
+                    setScore((prev) => prev + 3)
+                }
             }
         }
     }
@@ -191,7 +202,9 @@ const App = () => {
             }
             if (rowOfFive.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 rowOfFive.forEach(cell => deleteCell(cell));
-                setScore((prev) => prev+4)
+                if (decidedColor !== Blank) {
+                    setScore((prev) => prev + 4)
+                }
             }
         }
     }
@@ -206,7 +219,9 @@ const App = () => {
             }
             if (rowOfFive.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 rowOfFive.forEach(cell => deleteCell(cell))
-                setScore((prev) => prev+5)
+                if (decidedColor !== Blank) {
+                    setScore((prev) => prev + 5)
+                }
             }
         }
     }
@@ -262,9 +277,34 @@ const App = () => {
         checkForColumnOfFive, checkForColumnOfFour, checkForColumnOfThree,
         makeCellsFall, refillBoard, currentColorArrangement])
 
+    useEffect( () => {
+        if (score >= record) {
+            setRecord(score);
+            localStorage.setItem('CCrecord', record.toString());
+        }
+    }, [score, record])
+
+    useEffect( () => {
+        localStorage.setItem('CCrecord', record.toString());
+    }, [record])
+
+    useEffect( () => {
+        if (localStorage.getItem("CCrecord")) {
+            console.log("ура рекорд есть")
+            console.log(localStorage.getItem("CCrecord"))
+            // Достаём оттуда текущее значение рекорда
+            setRecord(parseInt(localStorage.getItem('CCrecord')));
+
+            // Иначе —
+        } else {
+            console.log("рекорда нет")
+            // Делаем новую запись и кладём туда ноль — рекорда пока нет
+            localStorage.setItem('CCrecord', record.toString());
+        }
+    }, [])
+
   return (
     <div className="app">
-        <h1> {message}</h1>
         <ScoreBoard score={score}/>
         <div className="game">
         { currentColorArrangement &&
