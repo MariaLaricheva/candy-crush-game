@@ -8,6 +8,7 @@ import GreenCandy from './images/green-candy.png';
 import BlueCandy from './images/blue-candy.png';
 import PurpleCandy from './images/purple-candy.png';
 import Blank from './images/blank.png';
+import ScoreBoard from "./components/ScoreBoard.jsx";
 
 const width = 8;
 const candyColors = [
@@ -21,9 +22,10 @@ const candyColors = [
 
 const App = () => {
     const [currentColorArrangement, setCurrentColorArrangement] = useState([]);
-    const [message, setMessage] = useState('')
-    const [draggedCell, setDraggedCell] = useState(null)
-    const [replacedCell, setReplacedCell] = useState(null)
+    const [message, setMessage] = useState('');
+    const [draggedCell, setDraggedCell] = useState(null);
+    const [replacedCell, setReplacedCell] = useState(null);
+    const [score, setScore] = useState(0);
 
 
     const createRandomColor = () => {
@@ -134,8 +136,10 @@ const App = () => {
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 columnOfThree.forEach(cell => deleteCell(cell));
+                setScore((prev) => prev+3)
             }
         }
+
     }
 
     const checkForColumnOfFour = () => {
@@ -145,6 +149,7 @@ const App = () => {
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 columnOfThree.forEach(cell => deleteCell(cell));
+                setScore((prev) => prev+4)
             }
         }
     }
@@ -156,6 +161,7 @@ const App = () => {
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 columnOfThree.forEach(cell => deleteCell(cell))
+                setScore((prev) => prev+5)
             }
         }
     }
@@ -170,6 +176,7 @@ const App = () => {
             }
             if (rowOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 rowOfThree.forEach(cell => deleteCell(cell))
+                setScore((prev) => prev+3)
             }
         }
     }
@@ -184,6 +191,7 @@ const App = () => {
             }
             if (rowOfFive.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 rowOfFive.forEach(cell => deleteCell(cell));
+                setScore((prev) => prev+4)
             }
         }
     }
@@ -198,6 +206,7 @@ const App = () => {
             }
             if (rowOfFive.every(cell => currentColorArrangement[cell] === decidedColor)) {
                 rowOfFive.forEach(cell => deleteCell(cell))
+                setScore((prev) => prev+5)
             }
         }
     }
@@ -246,7 +255,7 @@ const App = () => {
             makeCellsFall();
             refillBoard();
             setCurrentColorArrangement([...currentColorArrangement])
-        }, 700)
+        }, 200)
         //console.log('i check')
         return ( () => clearInterval(timer));
     },[checkForRowOfFive, checkForRowOfFour, checkForRowOfThree,
@@ -256,6 +265,7 @@ const App = () => {
   return (
     <div className="app">
         <h1> {message}</h1>
+        <ScoreBoard score={score}/>
         <div className="game">
         { currentColorArrangement &&
             currentColorArrangement.map((color, index) => (
