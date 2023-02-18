@@ -43,18 +43,10 @@ const App = () => {
         const possibleDivisions = [1,-1,width,-width]
 
         const isColumnMatching = checkForColumn(firstCell, secondCell);
-        console.log(isColumnMatching);
         const isRowMatching = checkForRow(firstCell, secondCell);
-        console.log(isRowMatching);
-
-
-        if (isColumnMatching || isRowMatching) {
-            console.log('something matches!')
-        }
-
 
         if (possibleDivisions.includes(firstCell - secondCell)){
-            if ((firstCell + secondCell) % width !== width - 1) {
+            if ( ((firstCell) % width + 1) * ((secondCell) % width + 1) !== 8 ) {
                 if ((isColumnMatching || isRowMatching)
                 ) {
                     return true
@@ -251,7 +243,6 @@ const App = () => {
 
         const draggedCellId = parseInt(draggedCell.getAttribute('data-id'));
         const replacedCellId = parseInt(replacedCell.getAttribute('data-id'));
-
 
         if (swappable(draggedCellId, replacedCellId)){
             swapCells(draggedCellId, replacedCellId);
