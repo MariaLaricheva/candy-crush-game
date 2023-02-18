@@ -31,10 +31,25 @@ const App = () => {
     const swappable = (firstCell, secondCell) => {
         const possibleDivisions = [1,-1,width,-width]
 
-        if (possibleDivisions.includes(firstCell - secondCell)){
-            return (firstCell + secondCell) % width !== width - 1;
+        const isColumnMatching = checkForColumn(firstCell, secondCell);
+        console.log(isColumnMatching);
+        const isRowMatching = checkForRow(firstCell, secondCell);
+        console.log(isRowMatching);
+
+
+        if (isColumnMatching || isRowMatching) {
+            console.log('something matches!')
         }
 
+
+        if (possibleDivisions.includes(firstCell - secondCell)){
+            if ((firstCell + secondCell) % width !== width - 1) {
+                if ((isColumnMatching || isRowMatching)
+                ) {
+                    return true
+                }
+            }
+        }
         return false
     }
 
@@ -69,15 +84,50 @@ const App = () => {
         }
     }
 
+    const checkForColumn = (firstCell, secondCell) => {
+        const newArrangement = [...currentColorArrangement];
+
+        [newArrangement[firstCell], newArrangement[secondCell]] = [newArrangement[secondCell], newArrangement[firstCell]];
+
+        for (let i = 0; i < width*width - width*2; i++){
+            const columnOfThree = [i, i+width, i+width*2];
+            const decidedColor = newArrangement[i];
+
+            if (columnOfThree.every(cell => newArrangement[cell] === decidedColor)) {
+                return true
+            }
+        }
+        return false;
+    }
+
+    const checkForRow = (firstCell, secondCell) => {
+        const newArrangement = [...currentColorArrangement];
+
+        [newArrangement[firstCell], newArrangement[secondCell]] = [newArrangement[secondCell], newArrangement[firstCell]];
+
+        for (let i = 0; i < width*width; i++){
+            const rowOfThree = [i, i+1, i+2];
+            const decidedColor = newArrangement[i];
+
+            if (i % width > (width-3)) {
+                continue;
+            }
+            if (rowOfThree.every(cell => newArrangement[cell] === decidedColor)) {
+                return true
+            }
+        }
+        return false;
+    }
+
     const checkForColumnOfThree = () => {
         for (let i = 0; i < width*width - width*2; i++){
             const columnOfThree = [i, i+width, i+width*2];
             const decidedColor = currentColorArrangement[i];
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
-                columnOfThree.forEach(cell => deleteCell(cell))
+                columnOfThree.forEach(cell => deleteCell(cell));
 
-                setMessage('Column of three!')
+                setMessage('Column of three!');
             }
         }
     }
@@ -88,8 +138,8 @@ const App = () => {
             const decidedColor = currentColorArrangement[i];
 
             if (columnOfThree.every(cell => currentColorArrangement[cell] === decidedColor)) {
-                columnOfThree.forEach(cell => deleteCell(cell))
-                setMessage('Column of four!')
+                columnOfThree.forEach(cell => deleteCell(cell));
+                setMessage('Column of four!');
             }
         }
     }
@@ -129,7 +179,7 @@ const App = () => {
                 continue;
             }
             if (rowOfFive.every(cell => currentColorArrangement[cell] === decidedColor)) {
-                rowOfFive.forEach(cell => deleteCell(cell))
+                rowOfFive.forEach(cell => deleteCell(cell));
             }
         }
     }
@@ -176,7 +226,6 @@ const App = () => {
 
 
         if (swappable(draggedCellId, replacedCellId)){
-
             swapCells(draggedCellId, replacedCellId);
         }
     }
@@ -193,7 +242,7 @@ const App = () => {
             makeCellsFall();
             refillBoard();
             setCurrentColorArrangement([...currentColorArrangement])
-        }, 1700)
+        }, 700)
         //console.log('i check')
         return ( () => clearInterval(timer));
     },[checkForRowOfFive, checkForRowOfFour, checkForRowOfThree,
@@ -219,6 +268,7 @@ const App = () => {
                      onDrop={dragDrop}
                      onDragEnd={dragEnd}
                 />
+
             ))
         }
         </div>
