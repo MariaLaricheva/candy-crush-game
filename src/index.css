@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  padding: 30px;
+}
+
+h1 {
+  width: 100%;
+}
+
+.game {
+  width: 560px;
+  height: 560px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.cell {
+  display: block;
+  width: 70px;
+  height: 70px;
+}
